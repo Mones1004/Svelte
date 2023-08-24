@@ -8,6 +8,7 @@
     const toggleWelcome = () => {
         showWelcome = !showWelcome;
     }
+    
 </script>
 
 <Welcome message = "Welcome to my 1st Svelte Project!" {showWelcome} on:click={toggleWelcome}>

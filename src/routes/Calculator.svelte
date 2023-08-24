@@ -1,22 +1,55 @@
 <script>
+    import { equationObject } from '$lib/expression.js'
+
     export let showCalculator = false;
 
     const buttons = [1,2,3,4,5,6,7,8,9,0];
     const operations = ['+', '-', '/', '*']
-    let equation = "";
-    
+
+    export let equation = "";
+    export let equationCharacter = {};
+    let count = 0;
+
+
     function showEquation() {
         document.querySelector('input').value = equation;
     }
 
-    function addInput(button) {
+    async function addInput(button) {
         equation += button;
         showEquation();
+
+        equationCharacter = button
+
+        const res = await fetch('api/addCharacter', {
+			method: 'POST',
+			body: JSON.stringify({equationCharacter}),
+            headers: {
+					'Content-Type': 'application/json'
+				}
+		})
+		
+        if (res.ok)
+            console.log("Success");
+        else 
+            console.log("error");
+
+		const result = await res.json()
+
+        console.log(result);
+        equationObject.push(equationCharacter);
     }
 
-    function calculate() {
-        document.querySelector('input').value = eval(equation);
+    async function calculate() {
+        console.log(equationObject);
+
+        const response = await fetch('/api/calculation');
+        let ans = await response.json();
+        
+        document.querySelector('input').value = ans;
+        equation = "";
     }
+
 
     function backSpace() {
         equation = equation.slice(0, -1);
@@ -37,18 +70,18 @@
 
         {#each buttons as button, i}
             <button class="button{button}" 
-                on:click={() => addInput(buttons[i])}
+                on:click={async () => addInput(buttons[i])}
             >{button}</button>
         {/each}
         
         {#each operations as button, i}
             <button class="button{button}"
-                on:click={() => addInput(operations[i])}
+                on:click={async () => addInput(operations[i])}
             >{button}</button>
         {/each}
 
         <button
-            on:click={() => calculate()}
+            on:click={calculate}
         >=</button>
 
     </div>
@@ -68,7 +101,7 @@
     button {
 		aspect-ratio: 1;
 		border-radius: 50%;
-		background: var(--color, #fff);
+		background: var(--color, #523232);
 		transition: all 0.1s;
         margin-right: 2px;
         margin-bottom: 1px;
