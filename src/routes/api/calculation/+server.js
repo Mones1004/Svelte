@@ -48,6 +48,11 @@ export function GET() {
 	}
 
 	console.log(equation)
+	
+	//remove all data from equationObject
+	while (equationObject.length > 0){
+		equationObject.pop()
+	}
 
-	return json(equation.pop());
+	return json(equation);
 }

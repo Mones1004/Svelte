@@ -1,7 +1,7 @@
 <script>
-    import Calculator from './Calculator.svelte';
-    import Welcome from './Welcome.svelte';
-    import AddVisitor from './AddVisitor.svelte';
+    import Calculator from '$lib/Calculator.svelte';
+    import Welcome from '$lib/Welcome.svelte';
+    import AddVisitor from '$lib/AddVisitor.svelte';
 
     let showWelcome = false;
 
